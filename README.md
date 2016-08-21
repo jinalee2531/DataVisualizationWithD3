@@ -1,22 +1,13 @@
 
-
 1. Summary
 
-This data visualization represents annual loan amount by state traded in Prosper 
-on a choropleth map of US States, since 2005 to 2014.
-
-Prosper is the company providing person-to-person lending platform on the web.
-
-As soon as viewers open this page, the visualization starts with animation presenting loan amount of each states on the choropleth map every year,
-after which, audiences can see the result of a specific year by selecting a year button.
-
-You would easily see the trends of scale of traded loan amount each year by states.
+This data visualization represents annual loan amount traded in Prosper by state on a choropleth map of US States, since 2005 to 2014.
+Prosper is the company providing person-to-person lending platform on the web. As soon as readers open this page, the visualization starts to run animation presenting loan amount of each states on the choropleth map of year in order,
+after which, audiences can see the result of a specific year by selecting a year button. You would easily see the trends of traded loan amount each year by states.
 The visualization is created with D3.js.
 
 
 2. Design 
-
-- explain any design choices you made including changes to the visualization after collecting feedback
 
 To show trends of loan amount among states effectively, mapped the amount data on the US choropleth map.
 Encoded loan amount value with size of circles on the choropleth map of United States.
@@ -32,8 +23,6 @@ A tooltip containing state and amount value shows up if mouseover on a specific 
 
 
 3. Feedback
-- include all feedback you received from others on your visualization 
-from the first sketch to the final visualization
 
 1) More information with the circles would make the visualization more clear such as amount values and states names.
 2) Changing color of a circle over mouse would be more conspicuous.
