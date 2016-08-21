@@ -11,6 +11,15 @@
 				color : black;
 			}
 			
+			p{
+				text-align: center;
+				color : black;
+			}
+			
+			#grey{
+			color: gray;
+			}
+			
 			circle{
 				fill : yellow;
 				stroke : black;
@@ -45,8 +54,22 @@
 				width = 1400-margin,
 				height = 600- margin;
 				
-			d3.select('body').append('h2').text('Prosper Loan by States')
-	
+			d3.select('body').append('h2').text('Prosper Loan Amount($) by States')
+			
+			d3.select('body').append('p').text('')
+		
+			d3.select('body').append('p').text('Prosper has been providing person-to-person lending platform since 2005 over nationwide.')
+			d3.select('body').append('p').text('')
+			d3.select('body').append('p').text('The amount of loan had kept increased until for a few years, however, they had struggled with high loan default rate until they relaunched their service with new, stricter credit guidelines  for borrowers in July 2009.')
+			d3.select('body').append('p').text('')
+			d3.select('body').append('p').text('The visualization below shows trends of loan amount by year for each state. You might see the lending amount is notably growing since 2010, after the company refined the credit guidelines.')
+			d3.select('body').append('p').text('')
+			d3.select('body')
+				.attr('class', 'grey')
+				.append('p')
+				.text('You can select a specific year to visualize by selecting a button of year on the top left side after animation ends.')
+				
+
 			var svg = d3.select('body')
 						.append('svg')
 						.attr('width', width + margin)
@@ -54,6 +77,27 @@
 						.append('g')
 						.attr('class', 'map');
 	
+			d3.select('body')
+				.append('svg')
+				.attr('width', width + margin)
+				.attr('height', margin)
+				.append('text')
+				.text('* Data Source: Prosper Loan Amount Data(Jan 2005~ Mar 2014)')
+				.attr("xlink:href", "https://www.google.com/url?q=https://s3.amazonaws.com/udacity-hosted-downloads/ud651/prosperLoanData.csv&sa=D&ust=1471821128880000&usg=AFQjCNEdv4UZxzYQGN5jmuTYHLXKmbHrOQ")
+
+			
+			
+			svg_text = d3.select("body").append("svg");
+
+			svg_text.selectAll(".node")
+			  .append("svg:a").attr("xlink:href", function(d){ return "generic.php?url=" + d.url })
+			  .append("svg:text")
+			  .text(function(d) { return d.name; })
+			  .attr("dy", 3.5)
+			  .attr("dx", 5.5)
+			  .attr("text-anchor", "middle");
+						
+			
 			
 			//console.log(svg);
 			
@@ -234,7 +278,7 @@
 				
 				// function to remove current circles except selected year and draw new circles of selected year.
 				function update(year){
-					var measure = 'Loan Amount';
+					var measure = 'Loan Amount($)';
 					
 					var filtered = nested.filter(function(d){
 												return new Date(d['key']).getUTCFullYear() === year;
