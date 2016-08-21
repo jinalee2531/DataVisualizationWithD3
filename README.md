@@ -1,7 +1,7 @@
 
 1. Summary
 
-This data visualization represents annual loan amount traded in Prosper by state on a choropleth map of US States, since 2005 to 2014.
+This data visualization represents annual loan amount traded in Prosper by state on a choropleth map of US States, since November 2005 to March 2014.
 Prosper is the company providing person-to-person lending platform on the web. As soon as readers open this page, the visualization starts to run animation presenting loan amount of each states on the choropleth map of year in order,
 after which, audiences can see the result of a specific year by selecting a year button. You would easily see the trends of traded loan amount each year by states.
 The visualization is created with D3.js.
@@ -9,24 +9,24 @@ The visualization is created with D3.js.
 
 2. Design 
 
-To show trends of loan amount among states effectively, mapped the amount data on the US choropleth map.
+To show trends of loan amount among states effectively, the loan amount data of each state was mapped on the US choropleth map.
 Encoded loan amount value with size of circles on the choropleth map of United States.
 
 Took the author driven structure for the very beginning of this visualization, which is an animation showing result of each year orderly.
-After the animation is ended, audiences can see the result of a specific year by clicking buttons representing the year.
+After the animation is ended, let audiences can explore the result of a specific year by clicking buttons representing the year.
 
 Considered pre-attentive processing principle to enhance perception of selected factor: 
 Background color of a text representing each year would be changed when it is selected, and color of a circle over mouse on the choropleth map would change.
 
-A tooltip containing state and amount value shows up if mouseover on a specific amount circles.
+A tooltip containing state name and amount value shows up if mouseover a specific circle representing amount of loan.
 
 
 
 3. Feedback
 
-1) More information with the circles would make the visualization more clear such as amount values and states names.
-2) Changing color of a circle over mouse would be more conspicuous.
-3) Some circles are too small to notice on the choropleth map. It would be better to adjust scale of circle to notice.
+- More information related to circles such as amount values and states names would make the visualization more clear.
+- Changing color of a circle over mouse would be more conspicuous.
+- Some circles are too small to notice on the choropleth map. It would be better to adjust scale of circle to notice.
 
 
 4. Resources consulted to create this visualization
