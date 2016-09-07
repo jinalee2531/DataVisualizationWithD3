@@ -16,6 +16,7 @@
 				color : black;
 			}
 			
+	
 			circle{
 				fill : yellow;
 				stroke : black;
@@ -41,9 +42,13 @@
 		
 		</style>
 		<script type = "text/javascript">
-		//var states_info ={}
 		
+		/*
+		This function draws a choropleth graph from uploaded US GEOjson data.
+		Then, mapping loan amount information of state over time.
 		
+		- input: loaded GEO-json data
+		*/
 		function draw(geo_data){
 			
 			var margin = 50,
@@ -54,18 +59,23 @@
 			
 			d3.select('body').append('p').text('')
 		
-			d3.select('body').append('p').text('Prosper has been providing person-to-person lending platform since 2005 over nationwide.')
+			d3.select('body').append('p').text('Prosper has been providing person-to-person lending platform since 2005 over nationwide.\
+				The amount of loan had kept increased until for first few years, however,\
+				they had struggled with high loan default rate and ended up being forced to shut down by SEC in Oct 2008.\
+				Later, they relaunched their service with new, stricter credit guidelines for borrowers in July 2009.')
 			d3.select('body').append('p').text('')
-			d3.select('body').append('p').text('The amount of loan had kept increased until for a few years, however, they had struggled with high loan default rate until they relaunched their service with new, stricter credit guidelines  for borrowers in July 2009.')
-			d3.select('body').append('p').text('')
-			d3.select('body').append('p').text('The visualization below shows trends of loan amount by year for each state. You might see the lending amount is notably growing since 2010, after the company refined the credit guidelines.')
-			d3.select('body').append('p').text('')
-			d3.select('body')
-				.attr('class', 'grey')
-				.append('p')
-				.text('You can select a specific year to visualize by selecting a button of year on the top left side after animation ends.')
-				
-
+			d3.select('body').append('p').text('The visualization below shows trends of loan amount by year for each state. \
+				You might see the lending amount is notably growing since 2010, after the company refined the credit guidelines cross states.\
+				As you can see from the choropleth, California has been leading in loan amount over time among states.\
+				While, there has been no borrowers in Iowa, Maine, and North Dakota where its governments have not allowed the Prosper Loan Service yet.');
+			d3.select("body").attr("class", "grey").append("p").text('')
+			
+			// mention about data collecting period in 2005, 2014
+			d3.select("body").attr("class", "grey").append("p").text('- For 2014 record, this data contains only first three months from January to March.\
+				- Some record without state information for first few years were disregarded in this visualization.\r\n\
+				- You can select a specific year to visualize by selecting a button of year \
+				on the top left side after animation ends.');
+			
 			var svg = d3.select('body')
 						.append('svg')
 						.attr('width', width + margin)
@@ -94,19 +104,11 @@
 			  .attr("text-anchor", "middle");
 						
 			
-			
-			//console.log(svg);
-			
-			//https://github.com/d3/d3-3.x-api-reference/blob/master/Geo-Projections.md
 			// project cordinates into pixels
-			var projection = d3.geo.albersUsa()								
-								.translate([width/2, height/2]);
+			var projection = d3.geo.albersUsa().translate([width/2, height/2]);
 								
-			// path(): construct the SVG object to correctly render pixels
-			// projection(): then do projection
 			var map_path = d3.geo.path().projection(projection)
-			
-			
+						
 			var map = svg.selectAll("path")
 						.data(geo_data.features)
 						.enter()
@@ -116,8 +118,7 @@
 						.style('stroke', 'black')
 						.style('stroke-width', .5);
 			
-			///// getting latitude, longitude information of each state
-			
+			// getting latitude, longitude information of each state
 			var circles = svg.selectAll('circle')
 							.data(0)
 							.enter()
@@ -125,108 +126,81 @@
 				
 			function plot_points(error, lat_lon, loan){
 
-			//console.log(state_lat_lon);
+			
+				/***************** transform lon, lat data into a list of two numeric values: [lon, lat]****************/
 				
-				/***************** states_geo_data ****************/
 				var states_info = {}
-				lat_lon.forEach(function(d){
-										var lat = +d.latitude,
-											lon = +d.longitude,
-											coords = projection([lon, lat]);
-										//debugger;
-										var x = coords[0],
-											y = coords[1];
-										
-										states_info[d.state] = {'lon' : lon
-																, 'lat' :lat
-																, 'name': d.state_name
-																, 'center_x': x
-																, 'center_y': y}
-										}
-									);
+				lat_lon.forEach(
+					function(d){
+						var lat = +d.latitude,
+						lon = +d.longitude,
+						coords = projection([lon, lat]);
+						var x = coords[0],
+						y = coords[1];
+						
+						states_info[d.state] = {'lon' : lon, 'lat' :lat, 'name': d.state_name, 'center_x': x, 'center_y': y}
+						}
+					);
 				
 				
-				/***************** loan data ****************/
+				/***************** manipulating loan data ****************/
+				
 				var format = d3.time.format('%Y-%m-%d %H:%M:%S');
 				
-				function grouping_status(status){
-						if (status.startsWith('Past')){
-						  return 'Past_Due';
-						}
-						else if(status.startsWith('Completed')){
-						  return 'Completed';
-						}
+				//transform data types of some fields of loan data in to proper format.
+				var loan_data = loan.map(
+					function(d){
+						function state_blank(state){
+							if (state){return state;}
+							else {return "na";}
+							}
+						var new_d = {}
+						new_d['LoanOriginationDate']=format.parse(d['LoanOriginationDate']);
+						new_d['LoanOriginationYear']=new_d['LoanOriginationDate'].getUTCFullYear(); 
+						new_d['LoanOriginalAmount'] = +d['LoanOriginalAmount']; // +: convert datatype to numeric from string
+						new_d['BorrowerAPR']= +d['BorrowerAPR']
+						new_d['BorrowerState'] = state_blank(d['BorrowerState'])									
 						
-						else if(status.startsWith('Default') | status.startsWith('Charged')){
-						  return 'ChargedOff_Default';
+						return new_d;
 						}
-						else if(status.startsWith('Current')){
-						  return 'Current';
-						  }		
-						else {
-						  return 'Others';
-						}
-					  }
-					
-				//d3.csv('prosperLoanData.csv'
-				var loan_data = loan.map(function(d){
-											function state_blank(state){
-												if (state){return state;}
-												else {return "na";}
-												;
-											}
-										//debugger;
-										var new_d = {}
-										new_d['LoanOriginationDate']=format.parse(d['LoanOriginationDate']);
-										new_d['LoanOriginationYear']=new_d['LoanOriginationDate'].getUTCFullYear(); 
-										new_d['LoanOriginalAmount'] = +d['LoanOriginalAmount']; // +: convert datatype to numeric from string
-										new_d['BorrowerAPR']= +d['BorrowerAPR']
-										new_d['LoanStatus_grouped'] = grouping_status(d['LoanStatus'])
-										new_d['BorrowerState'] = state_blank(d['BorrowerState'])									
-										
-										//debugger;
-										return new_d;
-										}
 						);
 				
-				//console.log(loan_data)
-					
-					
+				/*
+				This function aggregates loan amount by state and year
+				and return the result in dictionary data type.
+				*/
 				function agg_year(leaves){
-			  
-					  var loan_amount = d3.sum(leaves
-											, function(d){return d.LoanOriginalAmount;});
-					  //debugger;
-					  var group = leaves.map(function(d) {return d.LoanStatus_grouped;});
-					  
-					  /// need to agg by group!
-					  
-					  var loan_count = leaves.length
-					  
-					  return {'loan_amount': loan_amount, 'loan_count':loan_count}			  
+					var loan_amount = d3.sum(leaves, function(d){return d.LoanOriginalAmount;});
+					var group = leaves.map(function(d) {return d.LoanStatus_grouped;});
+					
+					var loan_count = leaves.length
+					
+					return {'loan_amount': loan_amount, 'loan_count':loan_count}			  
 					}
 
 				var nested = d3.nest()
-								.key(function(d){return d.LoanOriginationYear;})
-								.key(function(d){return d.BorrowerState;})
-								.rollup(agg_year)
-								.entries(loan_data);
+					.key(function(d){return d.LoanOriginationYear;})
+					.key(function(d){return d.BorrowerState;})
+					.rollup(agg_year)
+					.entries(loan_data);
 				
-		
+				/*
+				This function adds information--location, size of circle-- that needed to draw circles mapped to each value.
+				*/
 				function transform_filtered_data(data_thisyear){
-						return data_thisyear.map(function(d){
-													var by_state = d.values;
-													by_state.map(function(state){
-																		var state_info = states_info[state.key];
-																		state.x = state_info.center_x;
-																		state.y = state_info.center_y;
-																		
-																		return state;
-																		}
-																	)
-													return by_state;}
-												)[0];							
-						}
+					return data_thisyear.map(
+						function(d){
+							var by_state = d.values;
+							by_state.map(
+								function(state){
+									var state_info = states_info[state.key];
+									state.x = state_info.center_x;
+									state.y = state_info.center_y;
+									return state;
+									})	
+							return by_state;}
+						)[0];							
+					}
 				
 				
 
@@ -234,60 +208,58 @@
 					counts = [],
 					years = [];
 					
-					
-				nested.forEach(function(by_year){
-									
-									var year = +by_year.key,
-										by_state = by_year.values,
-										states = [];
-										
-										
-									years.push(year);
-									var amounts_thisyear=[]
-									by_state.map(function(d){
-													var state = d.key,
-														amount = d.values.loan_amount,
-														count = d.values.loan_count;
-													states.push(state);
-													amounts.push(amount);
-													counts.push(count);														
-													}
-												)
-									by_year.states = states;
-									
-									}
-								)
-				//debugger;			
 				
-				var amount_extent = d3.extent(amounts),
-					count_extent = d3.extent(counts);
-			
-				var radius = d3.scale.sqrt()
-							.domain(amount_extent)
-							.range([3,25]);
+				/* create a new data, by_state, consists of lists of states, years, aggregated loan amount values
+				of each year from the nested data
+				*/
+				nested.forEach(
+					function(by_year){
+						var year = +by_year.key,
+						by_state = by_year.values
+						
+						states = [];
+						by_state_remove_unknown=[]
+						
+						by_state.map(
+							function(d){
+								var state = d.key,
+								amount = d.values.loan_amount
+								
+								if (state != 'na'){
+									by_state_remove_unknown.push(d)
+									states.push(state);
+									amounts.push(amount);
+								}
+								}
+							)
+						
+						if (by_state_remove_unknown.length >0){
+							by_year.values = by_state_remove_unknown;
+							years.push(year);
+							}
+						}
+					)
 				
-				console.log(radius)
+				// get a range of values to scale size of circles that represent amount of loan
+				var amount_extent = d3.extent(amounts)
+				//function that scales radius of each circle accordingly to the value
+				var radius = d3.scale.sqrt().domain(amount_extent).range([3,25]);
+						
 				
-				
-				
-				/************ draw points ************/						
+				/************ draw circles on the map ************/						
 				
 				// function to remove current circles except selected year and draw new circles of selected year.
 				function update(year){
 					var measure = 'Loan Amount($)';
 					
-					var filtered = nested.filter(function(d){
-												return new Date(d['key']).getUTCFullYear() === year;
-												});
+					var filtered = nested.filter(function(d){return new Date(d['key']).getUTCFullYear() === year;});
 					var filtered_data = transform_filtered_data(filtered)
 					
 					svg.selectAll('circle').remove();
 					
-					
 					d3.select('h2').text('Prosper '+ measure+ ' by State in '+year);
 					
-					circles = svg.selectAll('circle')
-									.data(filtered_data);
+					circles = svg.selectAll('circle').data(filtered_data);
 					
 					circles = circles.enter()
 								.append('circle')
@@ -302,49 +274,33 @@
 					
 					/****** Creating Hoovers on the Map *****/
 											
-					circles.on('mouseover'
-								, function(d){
-									var xPosition = d3.mouse(this)[0];
-									var yPosition = d3.mouse(this)[1] - 30;
+					circles.on('mouseover', function(d){
+						var xPosition = d3.mouse(this)[0];
+						var yPosition = d3.mouse(this)[1] - 30;
+						var value =  d.values.loan_amount;
+						var state = d.key
 									
-									debugger;
-									
-									var value =  d.values.loan_amount;
-									
-									var state = d.key
-									
-									svg.append('text')
-										.attr('id', 'tooltip')
-										.attr('x', xPosition)
-										.attr('y', yPosition)
-										.attr('text-anchor', 'middle')
-										.attr('font-family', 'sans-serif')
-										.attr('font-size', '11px')
-										.attr('fill', 'black')
-										.attr('background-color', 'lightGray')
-										.text(function(e){return states_info[state].name+": $"+value;});
-										
-									d3.select(this)
-										.style("fill", "#509e2f");
-										}
-									)
-								.on('mouseout',
-										function(d){
-											d3.select('#tooltip').remove();
-											
-											d3.select(this)
-												.style("fill", "yellow");
-										}
-										);
-					
-					
-					//console.log(circles);
-								
-					/*
-						.transition()
-						.duration(10)
-					*/
-					}
+						svg.append('text')
+							.attr('id', 'tooltip')
+							.attr('x', xPosition)
+							.attr('y', yPosition)
+							.attr('text-anchor', 'middle')
+							.attr('font-family', 'sans-serif')
+							.attr('font-size', '11px')
+							.attr('fill', 'black')
+							.attr('background-color', 'lightGray')
+							.text(function(e){return states_info[state].name+": $"+value;});
+							
+						d3.select(this).style("fill", "#509e2f");
+						}
+						)
+					.on('mouseout',
+						function(d){
+							d3.select('#tooltip').remove();
+							d3.select(this).style("fill", "yellow");
+							}
+						);
+		}
 				
 								
 				
@@ -352,61 +308,49 @@
 					
 				var year_index = 0;
 				
-				var year_interval= setInterval(function(){
-										update(years[year_index]);
-										year_index++;
+				var year_interval= setInterval(
+					function(){
+						update(years[year_index]);
+						year_index++;
+						if(year_index === years.length){
+							clearInterval(year_interval);
+						
+							/****** Creating Interacting Year Buttons *****/
+							
+							var buttons = d3.select('body').append('div').attr('class', 'years_buttons');
+											
+							buttons = buttons.selectAll('div')
+								.data(years)
+								.enter()
+								.append('div')
+								.text(function(d){return d;});
+							
+							buttons.on('click'
+								, function(d){										
+									d3.select('.years_buttons')
+										.selectAll('div')
+										.transition()
+										.style('color', 'white')
+										.style('background', 'lightGray');
 										
-										if(year_index === years.length){
-										//if(year_index === 1){
-											clearInterval(year_interval);
-											
+									d3.select(this)
+										.transition()
+										.style('color', 'white')
+										.style('background', "green");																
 										
-											debugger;
-											
-											/****** Creating Interacting Year Buttons *****/
-											
-											var buttons = d3.select('body')
-															.append('div')
-															.attr('class', 'years_buttons');
-															
-											buttons = buttons.selectAll('div')
-												.data(years)
-												.enter()
-												.append('div')
-												.text(function(d){return d;});
-											
-											buttons.on('click'
-														, function(d){										
-															console.log(d);
-															
-															d3.select('.years_buttons')
-																.selectAll('div')
-																.transition()
-																.duration(500)
-																.style('color', 'white')
-																.style('background', 'lightGray');
-																
-															d3.select(this)
-																.transition()
-																.duration(500)
-																.style('color', 'white')
-																.style('background', "green");																
-																
-															update(d);															
-															});
-											}									
-										}
-										, 1500);
-				
-				
+									update(d);															
+									});
+							}									
+						}
+					, 1500);
 			}
 			
+			//Upload and then, manipulate data
 			queue()
 				.defer(d3.csv, 'data/state_lat_lon.csv')
 				.defer(d3.csv, 'data/prosperLoanData.csv')
 				.await(plot_points);
 					
-				//debugger;
 						
 		};			
 
@@ -418,8 +362,7 @@
 	<body>
 		<script type = "text/javascript">
 			
-			//var state_lat_lon = 
-
+			//upload US geo data to draw a choropleth map on a page.
 			d3.json("data/us_state.json", draw)
 		
 		</script>
