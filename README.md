@@ -34,4 +34,4 @@ A tooltip containing state name and amount value shows up if mouseover a specifi
 - US Choropleth Projection : https://github.com/d3/d3-3.x-api-reference/blob/master/Geo-Projections.md
 - Queue() : http://bl.ocks.org/mapsam/6090056
 - Prosper Wikipedia: https://en.wikipedia.org/wiki/Prosper_Marketplace
-- data set : Loan Data from Prosper https://www.google.com/url?q=https://s3.amazonaws.com/udacity-hosted-downloads/ud651/prosperLoanData.csv&sa=D&ust=1471821128880000&usg=AFQjCNEdv4UZxzYQGN5jmuTYHLXKmbHrOQ
+- data set : Loan Data from Prosper https://s3.amazonaws.com/udacity-hosted-downloads/ud651/prosperLoanData.csv
