@@ -2,9 +2,13 @@
 # 1. Summary
 
 This data visualization represents the amount of money loaned in Prosper Loan across state on a choropleth map, between November 2005 to March 2014.
+<<<<<<< HEAD
 Prosper is the company providing person-to-person lending platform on the web. As soon as readers open this page, the visualization starts to run animation presenting loan amount of each states on the choropleth map of year in order,
 after which, audiences can see the result of a specific year by selecting a year button. You would easily see the trends of traded loan amount each year by states.
 The visualization is created with D3.js.
+=======
+[Prosper](https://en.wikipedia.org/wiki/Prosper_Marketplace) is the company providing person-to-person lending platform on the web. As soon as readers open this page, the visualization starts to run animation presenting loan amount of each states on the choropleth map of year in order. After which, audiences can see the result of a specific year by selecting a year button. You would easily see the trends of traded loan amount each year by states. The visualization is created with D3.js.
+>>>>>>> origin/master
 
 
 # 2. Design 
@@ -31,9 +35,16 @@ A tooltip containing state name and amount value shows up if mouseover a specifi
 
 # 3. Resources consulted to create this visualization
 
+<<<<<<< HEAD
 - Source of data set : Loan Data from Prosper https://s3.amazonaws.com/udacity-hosted-downloads/ud651/prosperLoanData.csv
 - US Choropleth Projection : https://github.com/d3/d3-3.x-api-reference/blob/master/Geo-Projections.md
 - Queue() : http://bl.ocks.org/mapsam/6090056
 - Prosper Wikipedia: https://en.wikipedia.org/wiki/Prosper_Marketplace
 - SEC Outlines Its Reasoning For Shutting Down P2P Lender Prosper : https://goo.gl/qx5bFe
 - Which States are Open to Lending Club and Prosper? : http://www.lendingmemo.com/lending-club-and-prosper-states/
+=======
+- Source of data set : [Loan Data from Prosper](https://s3.amazonaws.com/udacity-hosted-downloads/ud651/prosperLoanData.csv)
+- [US Choropleth Projection] (https://github.com/d3/d3-3.x-api-reference/blob/master/Geo-Projections.md)
+- [SEC Outlines Its Reasoning For Shutting Down P2P Lender Prosper](https://goo.gl/qx5bFe)
+- [Which States are Open to Lending Club and Prosper?] (http://www.lendingmemo.com/lending-club-and-prosper-states/) 
+>>>>>>> origin/master
