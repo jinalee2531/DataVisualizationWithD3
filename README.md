@@ -2,7 +2,7 @@
 # 1. Summary
 
 This data visualization represents the amount of money loaned in Prosper Loan across state on a choropleth map, between November 2005 to March 2014.
-Prosper is the company providing person-to-person lending platform on the web. As soon as readers open this page, the visualization starts to run animation presenting loan amount of each states on the choropleth map of year in order,
+[Prosper](https://en.wikipedia.org/wiki/Prosper_Marketplace) is the company providing person-to-person lending platform on the web. As soon as readers open this page, the visualization starts to run animation presenting loan amount of each states on the choropleth map of year in order,
 after which, audiences can see the result of a specific year by selecting a year button. You would easily see the trends of traded loan amount each year by states.
 The visualization is created with D3.js.
 
