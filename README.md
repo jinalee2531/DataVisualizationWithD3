@@ -1,9 +1,7 @@
-[Run this visualization here!](https://jinalee2531.github.io/DataVisualizationWithD3/)
-
 ## [Run this visualization here!](https://jinalee2531.github.io/DataVisualizationWithD3/)
 
 Inline-style:
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](https://github.com/jinalee2531/DataVisualizationWithD3/blob/master/images/load_caution.png)
 
 
 
