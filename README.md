@@ -1,4 +1,3 @@
-[Run this visualization here!](https://jinalee2531.github.io/DataVisualizationWithD3/)
 
 # 1. Summary
 
